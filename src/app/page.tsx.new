@@ -1,0 +1,325 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
+import { FadeIn, ScrollReveal, HoverScale } from "@/components/ui/animations";
+import { 
+  FileText, 
+  ServerCog, 
+  Zap, 
+  LayoutDashboard, 
+  Cpu, 
+  Info,
+  Globe,
+  Code,
+  Monitor
+} from "lucide-react";
+
+export default function Home() {
+  const [greeting, setGreeting] = useState("");
+
+  const greet = async () => {
+    // ここでは@tauri-apps/apiを使ってRustの関数を呼び出します
+    try {
+      const { invoke } = await import("@tauri-apps/api/core");
+      const message = await invoke("greet", { name: "Tauri User" });
+      setGreeting(message as string);
+    } catch (error) {
+      console.error("Error invoking Tauri API:", error);
+      setGreeting("Error connecting to Tauri backend");
+    }
+  };
+
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-between p-8 bg-background gradient-bg relative overflow-hidden">
+      {/* 装飾的な背景要素 */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="circle-blur w-[40rem] h-[40rem] bg-primary/5 -top-20 -right-20 opacity-50"></div>
+        <div className="circle-blur w-[30rem] h-[30rem] bg-blue-500/5 bottom-0 -left-20 opacity-40"></div>
+        <div className="circle-blur w-[20rem] h-[20rem] bg-green-500/5 top-1/2 left-1/3 opacity-30"></div>
+      </div>
+      
+      <div className="flex flex-col items-center w-full">
+        <FadeIn>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-3 text-center">
+            Next.js + Tauri v2 + shadcn/ui
+          </h1>
+          <p className="text-muted-foreground text-center mb-12 max-w-2xl">
+            モダンなウェブ技術を活用した次世代デスクトップアプリケーション
+          </p>
+        </FadeIn>
+      </div>
+      
+      <div className="w-full max-w-5xl">
+        <Tabs defaultValue="dashboard" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 mb-6 glass p-1.5">
+            <TabsTrigger value="dashboard" className="flex items-center gap-2">
+              <LayoutDashboard className="h-4 w-4" />
+              <span>ダッシュボード</span>
+            </TabsTrigger>
+            <TabsTrigger value="features" className="flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              <span>機能</span>
+            </TabsTrigger>
+            <TabsTrigger value="about" className="flex items-center gap-2">
+              <Info className="h-4 w-4" />
+              <span>概要</span>
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="dashboard" className="mt-6 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <ScrollReveal>
+                <Card className="glass card-hover h-full">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300">
+                        <FileText className="h-5 w-5" />
+                      </div>
+                      <CardTitle>ファイル操作</CardTitle>
+                    </div>
+                    <CardDescription>ファイルの閲覧と管理</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col h-full">
+                    <p className="text-muted-foreground flex-grow">
+                      シンプルで使いやすいファイルブラウザを使用して、システム上のファイルを閲覧・管理できます。
+                    </p>
+                    <HoverScale className="mt-6">
+                      <Button asChild className="btn-gradient w-full">
+                        <Link href="/file-explorer" className="flex items-center justify-center gap-2">
+                          <FileText className="h-4 w-4" />
+                          ファイルエクスプローラを開く
+                        </Link>
+                      </Button>
+                    </HoverScale>
+                  </CardContent>
+                </Card>
+              </ScrollReveal>
+              
+              <ScrollReveal delay={0.1}>
+                <Card className="glass card-hover h-full">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-300">
+                        <Cpu className="h-5 w-5" />
+                      </div>
+                      <CardTitle>システム情報</CardTitle>
+                    </div>
+                    <CardDescription>デバイスとシステムの情報を表示</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col h-full">
+                    <p className="text-muted-foreground flex-grow">
+                      Rustバックエンドを使用してシステム情報をリアルタイムで取得し、分かりやすく視覚化します。
+                    </p>
+                    <HoverScale className="mt-6">
+                      <Button asChild variant="outline" className="glass w-full hover:bg-primary/10">
+                        <Link href="/system-info" className="flex items-center justify-center gap-2">
+                          <ServerCog className="h-4 w-4" />
+                          システム情報を見る
+                        </Link>
+                      </Button>
+                    </HoverScale>
+                  </CardContent>
+                </Card>
+              </ScrollReveal>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="features" className="mt-6 space-y-6">
+            <Card className="glass">
+              <CardHeader>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="p-2 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300">
+                    <Zap className="h-5 w-5" />
+                  </div>
+                  <CardTitle>主な機能</CardTitle>
+                </div>
+                <CardDescription>このアプリケーションの主な特徴</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FadeIn delay={0.1}>
+                    <div className="p-4 rounded-lg glass hover:shadow-md transition-all">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Globe className="h-5 w-5 text-blue-500" />
+                        <h3 className="font-semibold">クロスプラットフォーム</h3>
+                      </div>
+                      <p className="text-muted-foreground text-sm">Windows、macOS、Linuxで同じコードベースから動作します。</p>
+                    </div>
+                  </FadeIn>
+                  
+                  <FadeIn delay={0.2}>
+                    <div className="p-4 rounded-lg glass hover:shadow-md transition-all">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Zap className="h-5 w-5 text-yellow-500" />
+                        <h3 className="font-semibold">高速なパフォーマンス</h3>
+                      </div>
+                      <p className="text-muted-foreground text-sm">Rustで書かれたバックエンドにより、ネイティブに近いパフォーマンスを実現します。</p>
+                    </div>
+                  </FadeIn>
+                  
+                  <FadeIn delay={0.3}>
+                    <div className="p-4 rounded-lg glass hover:shadow-md transition-all">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Monitor className="h-5 w-5 text-green-500" />
+                        <h3 className="font-semibold">モダンUI</h3>
+                      </div>
+                      <p className="text-muted-foreground text-sm">shadcn/uiでスタイリングされた美しいコンポーネントを使用しています。</p>
+                    </div>
+                  </FadeIn>
+                  
+                  <FadeIn delay={0.4}>
+                    <div className="p-4 rounded-lg glass hover:shadow-md transition-all">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Code className="h-5 w-5 text-red-500" />
+                        <h3 className="font-semibold">テーマ切替</h3>
+                      </div>
+                      <p className="text-muted-foreground text-sm">ライト/ダークモードの切り替えに対応しています。</p>
+                    </div>
+                  </FadeIn>
+                </div>
+                
+                <div className="flex flex-col items-center mt-6 pt-4 border-t border-border">
+                  <p className="text-muted-foreground text-sm mb-4">Tauri（Rust）バックエンドの機能を試すには：</p>
+                  <HoverScale>
+                    <Button onClick={greet} className="btn-gradient">
+                      Rustバックエンドを呼び出す
+                    </Button>
+                  </HoverScale>
+                  
+                  {greeting && (
+                    <FadeIn>
+                      <div className="p-4 mt-4 rounded-lg glass w-full text-center">
+                        <p className="text-primary">{greeting}</p>
+                      </div>
+                    </FadeIn>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="about" className="mt-6">
+            <Card className="glass">
+              <CardHeader>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="p-2 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-300">
+                    <Info className="h-5 w-5" />
+                  </div>
+                  <CardTitle>このアプリについて</CardTitle>
+                </div>
+                <CardDescription>技術スタックと概要</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">このアプリケーションは以下の最新技術を使用して構築されています：</p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                  <div className="p-4 rounded-lg glass">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="p-1.5 rounded-md bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300">
+                        <Code className="h-4 w-4" />
+                      </div>
+                      <h3 className="font-semibold">Tauri v2</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground">RustとWebテクノロジーを使用したデスクトップアプリフレームワーク</p>
+                  </div>
+                  
+                  <div className="p-4 rounded-lg glass">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="p-1.5 rounded-md bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-300">
+                        <Globe className="h-4 w-4" />
+                      </div>
+                      <h3 className="font-semibold">Next.js</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground">ReactベースのWebフレームワーク</p>
+                  </div>
+                  
+                  <div className="p-4 rounded-lg glass">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="p-1.5 rounded-md bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300">
+                        <Monitor className="h-4 w-4" />
+                      </div>
+                      <h3 className="font-semibold">shadcn/ui</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground">再利用可能なUIコンポーネントライブラリ</p>
+                  </div>
+                  
+                  <div className="p-4 rounded-lg glass">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="p-1.5 rounded-md bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-300">
+                        <Cpu className="h-4 w-4" />
+                      </div>
+                      <h3 className="font-semibold">TailwindCSS</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground">ユーティリティファーストのCSSフレームワーク</p>
+                  </div>
+                </div>
+                
+                <div className="mt-8 pt-4 border-t border-border">
+                  <SystemInfo />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </main>
+  );
+}
+
+function SystemInfo() {
+  const [systemInfo, setSystemInfo] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  
+  const fetchSystemInfo = async () => {
+    try {
+      setLoading(true);
+      const { invoke } = await import("@tauri-apps/api/core");
+      const info = await invoke("get_system_info");
+      setSystemInfo(info as string);
+    } catch (error) {
+      console.error("Error fetching system info:", error);
+      setSystemInfo("システム情報の取得に失敗しました");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  return (
+    <div className="space-y-4">
+      <h3 className="font-semibold text-center mb-4">このシステムの情報を取得</h3>
+      <div className="flex justify-center">
+        <HoverScale>
+          <Button 
+            onClick={fetchSystemInfo} 
+            className="glass hover:bg-primary/10"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <div className="animate-spin mr-2 h-4 w-4 border-2 border-primary border-t-transparent rounded-full"></div>
+                読み込み中...
+              </>
+            ) : (
+              <>
+                <ServerCog className="mr-2 h-4 w-4" />
+                システム情報を取得
+              </>
+            )}
+          </Button>
+        </HoverScale>
+      </div>
+      
+      {systemInfo && (
+        <FadeIn>
+          <div className="p-4 rounded-lg glass">
+            <pre className="whitespace-pre-wrap text-sm">{systemInfo}</pre>
+          </div>
+        </FadeIn>
+      )}
+    </div>
+  );
+}

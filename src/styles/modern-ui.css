@@ -1,0 +1,48 @@
+/* モダンなUIのためのユーティリティクラス */
+
+/* ガラスモーフィズム効果 */
+.glass {
+  @apply bg-white/10 backdrop-blur-md border border-white/20 dark:bg-black/10 dark:border-white/10;
+}
+
+/* グラデーションボタン */
+.btn-gradient {
+  @apply bg-gradient-to-r from-primary to-blue-500 hover:from-blue-600 hover:to-primary text-white font-medium;
+}
+
+/* カード効果 */
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+/* テキスト見出しスタイル */
+.heading-xl {
+  @apply font-heading font-bold text-4xl md:text-5xl lg:text-6xl;
+}
+
+.heading-lg {
+  @apply font-heading font-bold text-3xl md:text-4xl;
+}
+
+/* モダンなセクション区切り */
+.section-divider {
+  @apply my-12 h-px bg-gradient-to-r from-transparent via-muted-foreground/50 to-transparent;
+}
+
+/* アニメーション用クラス */
+.hover-scale {
+  @apply transition-transform hover:scale-105;
+}
+
+.hover-glow {
+  @apply transition-all duration-300 hover:shadow-[0_0_15px_rgba(var(--primary),0.5)];
+}
+
+/* モダンなグラフィック要素 */
+.circle-blur {
+  @apply absolute rounded-full opacity-70 blur-3xl;
+}
+
+.gradient-bg {
+  @apply bg-gradient-to-br from-primary/30 via-background to-blue-500/30;
+}
